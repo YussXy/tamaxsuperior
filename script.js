@@ -1,6 +1,6 @@
 const CONFIG = {
     storeName: "Tama x Superrior",
-    ownerName̸: "Tama x Superrior",
+    ownerName: "Tama x Superrior",
     avatar: "image/logo/logo.jpg",
     instagram: "",
     telegram: "https://t.me/Bosmuda908",
@@ -8,35 +8,42 @@ const CONFIG = {
     adminNumber: "628995444004"
 };
 
-const banners = [
-    "image/banner/banner1.jpg",
-    "image/banner/banner2.jpg",
-    "image/banner/banner3.jpg"
-];
-
 const products = [
-    { id: 1, name: "Member Bug", price: 3000, image: "image/produk/produk11.jpg", desc: "Bisa Bug Sepuasnya" },
-    
-    
-    { id: 2, name: "Reseller Bug", price: 5000, image: "image/produk/produk21.jpg", desc: "Bisa Jualam Member Bug" },
-    
-    
-    { id: 3, name: "Admin Bug", price: 10000, image: "image/produk/produk31.jpg", desc: "Bisa Open Reseler Bug"},
-    
-    
-    { id: 4, name: "Partner Bug", price: 15000, image: "image/produk/produk47.jpg", desc: "Bisa Open Admin Bug" },
-    
-    { id: 5, name: "Tangan Kanan Bug", price: 20000, image: "image/produk/produk5.jpg", desc: "Bisa Open patner Bug" },
-    
-    
-    { id: 6, name: "Moderator Bug", price: 25000, image: "image/produk/produk67.jpg", desc: "Bisa open Tangan kanan bug" },
-    
-    
-        { id: 7, name: "Owner Bug", price: 30000, image: "image/produk/produk6.jpg", desc: "Full akses" }
-    
-    
-    
-    
+    { id: 1, name: "MEMBER", packages: [
+        { duration: "Per Hari", price: 3000 },
+        { duration: "1 Bulan", price: 5000 },
+        { duration: "Permanen", price: 10000 }
+    ]},
+    { id: 2, name: "RESELLER", packages: [
+        { duration: "Per Hari", price: 5000 },
+        { duration: "1 Bulan", price: 10000 },
+        { duration: "Permanen", price: 25000 }
+    ]},
+    { id: 3, name: "ADMIN", packages: [
+        { duration: "Per Hari", price: 10000 },
+        { duration: "1 Bulan", price: 15000 },
+        { duration: "Permanen", price: 30000 }
+    ]},
+    { id: 4, name: "PARTNER", packages: [
+        { duration: "Per Hari", price: 15000 },
+        { duration: "1 Bulan", price: 20000 },
+        { duration: "Permanen", price: 35000 }
+    ]},
+    { id: 5, name: "TANGAN KANAN", packages: [
+        { duration: "Per Hari", price: 20000 },
+        { duration: "1 Bulan", price: 25000 },
+        { duration: "Permanen", price: 40000 }
+    ]},
+    { id: 6, name: "MODERATOR", packages: [
+        { duration: "Per Hari", price: 25000 },
+        { duration: "1 Bulan", price: 30000 },
+        { duration: "Permanen", price: 45000 }
+    ]},
+    { id: 7, name: "OWNER", packages: [
+        { duration: "Per Hari", price: 30000 },
+        { duration: "1 Bulan", price: 35000 },
+        { duration: "Permanen", price: 50000 }
+    ]}
 ];
 
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -66,7 +73,7 @@ function addRipple(e, element) {
 }
 
 document.addEventListener("click", function(e) {
-    const target = e.target.closest(".product-card, .feature-item, .social-icon, .btn-buy, .btn-cart, .menu-btn, .cart-badge, .menu-item, .modal-close, .btn-confirm");
+    const target = e.target.closest(".product-card, .feature-item, .social-icon, .btn-buy, .btn-cart, .menu-btn, .cart-badge, .menu-item, .modal-close, .btn-confirm, .duration-option");
     if (target && !target.closest(".modal-overlay")) {
         playSound();
         addRipple(e, target);
@@ -92,53 +99,59 @@ function showToast(message) {
     }, 2000);
 }
 
-function addToCart(product) {
-    const existing = cart.find(i => i.id === product.id);
+function addToCart(productWithPackage) {
+    const existing = cart.find(i => i.id === productWithPackage.id && i.duration === productWithPackage.duration);
     if (existing) {
         existing.qty++;
     } else {
-        cart.push({ ...product, qty: 1 });
+        cart.push({ ...productWithPackage, qty: 1 });
     }
     updateCartCount();
-    showToast(`${product.name} +1`);
+    showToast(`${productWithPackage.name} (${productWithPackage.duration}) +1`);
 }
-
-
 
 function initBanner() {
     const container = document.getElementById("bannerSlider");
     if (!container) return;
-    container.innerHTML = "";
-    banners.forEach((src, idx) => {
-        const slide = document.createElement("div");
-        slide.className = "banner-slide";
-        if (idx === 0) slide.classList.add("active");
-        slide.innerHTML = `<img src="${src}" alt="banner" onerror="this.src='image/logo/logo.jpg'">`;
-        container.appendChild(slide);
-    });
-    const dotsDiv = document.createElement("div");
-    dotsDiv.className = "banner-dots";
-    banners.forEach((_, i) => {
-        const dot = document.createElement("span");
-        dot.className = "banner-dot";
-        if (i === 0) dot.classList.add("active");
-        dot.addEventListener("click", () => showBannerSlide(i));
-        dotsDiv.appendChild(dot);
-    });
-    container.appendChild(dotsDiv);
-    let current = 0;
-    if (bannerInterval) clearInterval(bannerInterval);
-    bannerInterval = setInterval(() => {
-        current = (current + 1) % banners.length;
-        showBannerSlide(current);
-    }, 5000);
+    container.innerHTML = '';
+    const video = document.createElement('video');
+    video.src = 'image/banner/banner.mp4';
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.style.width = '100%';
+    video.style.height = '100%';
+    video.style.objectFit = 'cover';
+    container.appendChild(video);
 }
 
-function showBannerSlide(index) {
-    const slides = document.querySelectorAll(".banner-slide");
-    const dots = document.querySelectorAll(".banner-dot");
-    slides.forEach((s, i) => s.classList.toggle("active", i === index));
-    dots.forEach((d, i) => d.classList.toggle("active", i === index));
+function showDurationSelector(product) {
+    const modal = document.getElementById("productDetailModal");
+    const content = document.getElementById("detailContent");
+    content.innerHTML = `
+        <div class="detail-title">${product.name}</div>
+        <div style="margin: 16px 0;">
+            ${product.packages.map(pkg => `
+                <button class="duration-option" data-duration="${pkg.duration}" data-price="${pkg.price}">
+                    ${pkg.duration} - Rp ${pkg.price.toLocaleString('id-ID')}
+                </button>
+            `).join('')}
+        </div>
+        <button class="modal-close" id="closeDuration">Batal</button>
+    `;
+    modal.classList.add("open");
+    document.getElementById("modalOverlay").classList.add("active");
+    
+    document.querySelectorAll(".duration-option").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const duration = btn.dataset.duration;
+            const price = parseInt(btn.dataset.price);
+            closeDetail();
+            showPaymentWithDuration(product, { duration, price });
+        });
+    });
+    document.getElementById("closeDuration")?.addEventListener("click", closeDetail);
 }
 
 function showProductDetail(product) {
@@ -146,19 +159,17 @@ function showProductDetail(product) {
     const modal = document.getElementById("productDetailModal");
     const content = document.getElementById("detailContent");
     content.innerHTML = `
-        <img src="${product.image}" class="detail-image" onerror="this.src='image/logo/logo.jpg'">
         <div class="detail-title">${product.name}</div>
-        <div class="detail-price">Rp ${product.price.toLocaleString('id-ID')}</div>
-        <div class="detail-desc">${product.desc}</div>
+        <div class="detail-desc">Pilih durasi untuk melanjutkan pembelian</div>
         <div class="product-actions" style="margin-top:16px;">
-            <button class="btn-buy" style="flex:1;" id="detailBuyBtn">Beli Sekarang</button>
+            <button class="btn-buy" style="flex:1;" id="detailBuyBtn">Pilih Durasi</button>
             <button class="btn-cart" style="flex:1;" id="detailCartBtn"><i class="ri-add-line"></i> Keranjang</button>
         </div>
     `;
     modal.classList.add("open");
     document.getElementById("modalOverlay").classList.add("active");
-    document.getElementById("detailBuyBtn").onclick = () => { showPayment(product); closeDetail(); };
-    document.getElementById("detailCartBtn").onclick = () => { addToCart(product); closeDetail(); };
+    document.getElementById("detailBuyBtn").onclick = () => { showDurationSelector(product); closeDetail(); };
+    document.getElementById("detailCartBtn").onclick = () => { showDurationSelector(product); closeDetail(); };
 }
 
 function closeDetail() {
@@ -166,17 +177,16 @@ function closeDetail() {
     document.getElementById("modalOverlay").classList.remove("active");
 }
 
-function showPayment(product) {
-    currentProduct = product;
+function showPaymentWithDuration(product, selectedPackage) {
     const modal = document.getElementById("paymentModal");
     const content = document.getElementById("paymentContent");
     content.innerHTML = `
         <div style="text-align:center; padding: 0 10px;">
-            <img src="image/qris.png" class="qris-image" onerror="this.src='https://placehold.co/320x320?text=QRIS'">
-            <div style="font-size:20px; font-weight:700; margin-top:10px;">${product.name}</div>
-            <div style="font-size:28px; font-weight:800; color:#22d3ee; margin:12px 0;">Rp ${product.price.toLocaleString('id-ID')}</div>
+            <img src="image/qris.png" class="qris-image" onerror="this.src='https://placehold.co/300x300?text=QRIS'">
+            <div style="font-size:20px; font-weight:700; margin-top:10px;">${product.name} (${selectedPackage.duration})</div>
+            <div style="font-size:28px; font-weight:800; color:#22d3ee; margin:12px 0;">Rp ${selectedPackage.price.toLocaleString('id-ID')}</div>
             <div class="payment-note">
-                <i class="ri-alert-line"></i> Untuk Saat Ini Prmbayaran Tidak Bisa Memakai Qris. Silahkan Melakukan Pmebyaran Ke Dana Dengan Nomor 08995444004
+                <i class="ri-alert-line"></i> Untuk Saat Ini Pembayaran Tidak Bisa Memakai QRIS. Silahkan Melakukan Pembayaran Ke Dana Dengan Nomor 08995444004
             </div>
             <button class="btn-confirm" id="confirmWAButton">
                 <i class="ri-whatsapp-line"></i> Konfirmasi via WhatsApp
@@ -186,7 +196,7 @@ function showPayment(product) {
     modal.classList.add("open");
     document.getElementById("modalOverlay").classList.add("active");
     document.getElementById("confirmWAButton").onclick = () => {
-        const message = `Halo admin, saya ingin konfirmasi pembayaran untuk produk: ${product.name} dengan harga Rp ${product.price.toLocaleString('id-ID')}. Terima kasih.`;
+        const message = `Halo admin, saya ingin konfirmasi pembayaran untuk produk: ${product.name} (${selectedPackage.duration}) dengan harga Rp ${selectedPackage.price.toLocaleString('id-ID')}. Terima kasih.`;
         const url = `https://wa.me/${CONFIG.adminNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, "_blank");
     };
@@ -196,7 +206,6 @@ function closePayment() {
     document.getElementById("paymentModal").classList.remove("open");
     document.getElementById("modalOverlay").classList.remove("active");
 }
-
 
 function showCart() {
     const main = document.getElementById("mainContent");
@@ -228,12 +237,12 @@ function showCart() {
             <div class="cart-items">
                 ${cart.map(item => `
                     <div class="cart-item">
-                        <div><strong>${item.name}</strong><br><small>Rp ${item.price.toLocaleString('id-ID')}</small></div>
+                        <div><strong>${item.name} (${item.duration})</strong><br><small>Rp ${item.price.toLocaleString('id-ID')}</small></div>
                         <div style="display:flex; align-items:center; gap:12px;">
-                            <button class="cart-qty-minus" data-id="${item.id}" style="background:#2a2f38; border:none; width:32px; height:32px; border-radius:16px; cursor:pointer; font-size:16px; color:white;">-</button>
+                            <button class="cart-qty-minus" data-id="${item.id}" data-duration="${item.duration}" style="background:#2a2f38; border:none; width:32px; height:32px; border-radius:16px; cursor:pointer; font-size:16px; color:white;">-</button>
                             <span style="min-width:24px; text-align:center;">${item.qty}</span>
-                            <button class="cart-qty-plus" data-id="${item.id}" style="background:#2a2f38; border:none; width:32px; height:32px; border-radius:16px; cursor:pointer; font-size:16px; color:white;">+</button>
-                            <button class="cart-remove" data-id="${item.id}" style="background:#dc2626; border:none; width:32px; height:32px; border-radius:16px; cursor:pointer; color:white;"><i class="ri-delete-bin-line"></i></button>
+                            <button class="cart-qty-plus" data-id="${item.id}" data-duration="${item.duration}" style="background:#2a2f38; border:none; width:32px; height:32px; border-radius:16px; cursor:pointer; font-size:16px; color:white;">+</button>
+                            <button class="cart-remove" data-id="${item.id}" data-duration="${item.duration}" style="background:#dc2626; border:none; width:32px; height:32px; border-radius:16px; cursor:pointer; color:white;"><i class="ri-delete-bin-line"></i></button>
                         </div>
                     </div>
                 `).join('')}
@@ -251,11 +260,14 @@ function showCart() {
         btn.addEventListener("click", (e) => {
             e.stopPropagation();
             const id = parseInt(btn.dataset.id);
-            const item = cart.find(i => i.id === id);
-            if (item.qty > 1) item.qty--;
-            else cart = cart.filter(i => i.id !== id);
-            updateCartCount();
-            showCart();
+            const duration = btn.dataset.duration;
+            const index = cart.findIndex(i => i.id === id && i.duration === duration);
+            if (index !== -1) {
+                if (cart[index].qty > 1) cart[index].qty--;
+                else cart.splice(index, 1);
+                updateCartCount();
+                showCart();
+            }
         });
     });
     
@@ -263,8 +275,9 @@ function showCart() {
         btn.addEventListener("click", (e) => {
             e.stopPropagation();
             const id = parseInt(btn.dataset.id);
-            const item = cart.find(i => i.id === id);
-            item.qty++;
+            const duration = btn.dataset.duration;
+            const item = cart.find(i => i.id === id && i.duration === duration);
+            if (item) item.qty++;
             updateCartCount();
             showCart();
         });
@@ -274,7 +287,8 @@ function showCart() {
         btn.addEventListener("click", (e) => {
             e.stopPropagation();
             const id = parseInt(btn.dataset.id);
-            cart = cart.filter(i => i.id !== id);
+            const duration = btn.dataset.duration;
+            cart = cart.filter(i => !(i.id === id && i.duration === duration));
             updateCartCount();
             showCart();
         });
@@ -282,13 +296,12 @@ function showCart() {
     
     document.getElementById("checkoutFromCart")?.addEventListener("click", () => {
         const totalPrice = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-        const productList = cart.map(i => `${i.name} x${i.qty}`).join(", ");
-        
+        const productList = cart.map(i => `${i.name} (${i.duration}) x${i.qty}`).join(", ");
         const modal = document.getElementById("paymentModal");
         const content = document.getElementById("paymentContent");
         content.innerHTML = `
             <div style="text-align:center; padding: 0 10px;">
-                <img src="image/qris.png" class="qris-image" onerror="this.src='https://placehold.co/320x320?text=QRIS'">
+                <img src="image/qris.png" class="qris-image" onerror="this.src='https://placehold.co/300x300?text=QRIS'">
                 <div style="font-size:18px; font-weight:700; margin-top:10px;">Checkout Keranjang</div>
                 <div style="font-size:13px; color:#8e95a5; margin:8px 0; word-break:break-word;">${productList}</div>
                 <div style="font-size:28px; font-weight:800; color:#22d3ee; margin:12px 0;">Rp ${totalPrice.toLocaleString('id-ID')}</div>
@@ -316,8 +329,6 @@ function showCart() {
     });
 }
 
-
-
 function showGuide() {
     const main = document.getElementById("mainContent");
     main.innerHTML = `
@@ -327,11 +338,11 @@ function showGuide() {
                 <h2 style="font-size:20px;">Panduan Belanja</h2>
             </div>
             <div style="background:#1a1d24; border-radius:24px; padding:24px;">
-                <div style="margin-bottom:20px;"><span style="background:#06b6d4; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:14px; margin-right:12px;">1</span> Pilih produk yang ingin dibeli</div>
-                <div style="margin-bottom:20px;"><span style="background:#06b6d4; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:14px; margin-right:12px;">2</span> Klik "Beli Sekarang" atau tambah ke keranjang</div>
-                <div style="margin-bottom:20px;"><span style="background:#06b6d4; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:14px; margin-right:12px;">3</span> Scan QRIS dan lakukan pembayaran sesuai nominal</div>
-                <div style="margin-bottom:20px;"><span style="background:#06b6d4; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:14px; margin-right:12px;">4</span> Klik "Konfirmasi via WhatsApp" dan kirim bukti transfer</div>
-                <div><span style="background:#06b6d4; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:14px; margin-right:12px;">5</span> Produk akan dikirim dalam 2-15 menit setelah verifikasi</div>
+                <div style="margin-bottom:20px;"><span style="background:#6366f1; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:14px; margin-right:12px;">1</span> Pilih produk yang ingin dibeli</div>
+                <div style="margin-bottom:20px;"><span style="background:#6366f1; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:14px; margin-right:12px;">2</span> Pilih durasi (Per Hari, 1 Bulan, atau Permanen)</div>
+                <div style="margin-bottom:20px;"><span style="background:#6366f1; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:14px; margin-right:12px;">3</span> Lakukan pembayaran ke nomor Dana yang tertera</div>
+                <div style="margin-bottom:20px;"><span style="background:#6366f1; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:14px; margin-right:12px;">4</span> Klik "Konfirmasi via WhatsApp" dan kirim bukti transfer</div>
+                <div><span style="background:#6366f1; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:14px; margin-right:12px;">5</span> Produk akan dikirim dalam 2-15 menit setelah verifikasi</div>
             </div>
         </div>
     `;
@@ -368,17 +379,20 @@ function renderHome() {
     `;
 
     const grid = document.getElementById("productsGrid");
-    grid.innerHTML = products.map(p => `
-        <div class="product-card" data-id="${p.id}">
-            <img src="${p.image}" class="product-image" onerror="this.src='image/logo/logo.jpg'">
-            <div class="product-title">${p.name}</div>
-            <div class="product-price">Rp ${p.price.toLocaleString('id-ID')}</div>
-            <div class="product-actions">
-                <button class="btn-buy" data-product='${JSON.stringify(p)}'>Beli</button>
-                <button class="btn-cart" data-product='${JSON.stringify(p)}'><i class="ri-add-line"></i> Keranjang</button>
+    grid.innerHTML = products.map(p => {
+        const firstPrice = p.packages[0].price;
+        return `
+            <div class="product-card" data-id="${p.id}">
+                <img src="image/produk/produk${p.id}.jpg" class="product-image" onerror="this.src='image/logo/logo.jpg'">
+                <div class="product-title">${p.name}</div>
+                <div class="product-price">Mulai Rp ${firstPrice.toLocaleString('id-ID')}</div>
+                <div class="product-actions">
+                    <button class="btn-buy" data-product='${JSON.stringify(p)}'>Beli</button>
+                    <button class="btn-cart" data-product='${JSON.stringify(p)}'><i class="ri-add-line"></i> Keranjang</button>
+                </div>
             </div>
-        </div>
-    `).join("");
+        `;
+    }).join("");
 
     document.querySelectorAll(".product-card").forEach(card => {
         card.addEventListener("click", (e) => {
@@ -393,7 +407,7 @@ function renderHome() {
         btn.addEventListener("click", (e) => {
             e.stopPropagation();
             const product = JSON.parse(btn.dataset.product);
-            showPayment(product);
+            showDurationSelector(product);
         });
     });
 
@@ -401,7 +415,7 @@ function renderHome() {
         btn.addEventListener("click", (e) => {
             e.stopPropagation();
             const product = JSON.parse(btn.dataset.product);
-            addToCart(product);
+            showDurationSelector(product);
         });
     });
 
@@ -439,7 +453,6 @@ function initMenu() {
         });
     });
 }
-
 
 function initModals() {
     document.getElementById("closeDetail").addEventListener("click", closeDetail);
