@@ -1,4 +1,3 @@
-/* style.css */
 * {
     margin: 0;
     padding: 0;
@@ -7,17 +6,17 @@
 }
 
 :root {
-    --bg-primary: #0a0f1a;
-    --bg-secondary: #0f1420;
-    --bg-card: #161c2c;
-    --bg-elevated: #1e2538;
-    --text-primary: #edf2f7;
-    --text-secondary: #94a3b8;
-    --accent: #3b82f6;
-    --accent-glow: #60a5fa;
-    --accent-dark: #2563eb;
-    --success: #10b981;
-    --warning: #f59e0b;
+    --bg-primary: #0c0f17;
+    --bg-secondary: #11151f;
+    --bg-card: #171d2b;
+    --bg-elevated: #1f2537;
+    --text-primary: #f1f5f9;
+    --text-secondary: #8ba0bc;
+    --accent: #6366f1;
+    --accent-glow: #818cf8;
+    --accent-dark: #4f46e5;
+    --success: #22c55e;
+    --warning: #eab308;
     --border: #1e293b;
     --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -81,16 +80,13 @@ body {
     background: var(--accent);
 }
 
-
-
 .store-name-header {
     font-size: 18px;
-    font-weight: 700;
-    color: var(--accent-glow);
-    letter-spacing: 0.5px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
 }
-
-
 
 .placeholder-icon {
     width: 42px;
@@ -205,7 +201,7 @@ body {
     opacity: 1;
 }
 
-.banner-slide img {
+.banner-slide img, .banner-slider video {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -443,7 +439,10 @@ body {
     font-size: 22px;
     cursor: pointer;
     z-index: 90;
-    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    left: auto !important;
+    transition: none;
+    transform: none;
 }
 
 .cart-count {
@@ -557,14 +556,14 @@ body {
 }
 
 .qris-image {
-    width: 340px;
-    height: 340px;
+    width: 300px;
+    height: 300px;
     object-fit: contain;
     margin: 0 auto 20px;
     display: block;
     background: white;
     border-radius: 20px;
-    padding: 20px;
+    padding: 16px;
 }
 
 .payment-note {
@@ -680,7 +679,7 @@ body {
 .ripple-effect {
     position: absolute;
     border-radius: 50%;
-    background: rgba(6, 182, 212, 0.4);
+    background: rgba(99, 102, 241, 0.4);
     transform: scale(0);
     animation: rippleAnim 0.5s linear;
     pointer-events: none;
@@ -692,9 +691,6 @@ body {
         opacity: 0;
     }
 }
-
-
-
 
 .toast-notification {
     position: fixed;
@@ -720,25 +716,20 @@ body {
     transform: translateX(-50%) scale(1);
 }
 
-
-
-
-.cart-badge {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    left: auto !important;
-    background: var(--accent);
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
+.duration-option {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    color: white;
+    font-weight: 600;
     cursor: pointer;
-    z-index: 90;
-    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
-    transition: none;
-    transform: none;
+    text-align: left;
 }
+
+.duration-option:active {
+    background: var(--accent);
+                     }
